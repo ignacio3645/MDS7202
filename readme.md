@@ -1,0 +1,1 @@
+Este repositorio contiene los contenidos del curso Laboratorio de Programacion Cientifica MDS7202 perteneciente al MSc. in DataScience de la Universidad de Chile
