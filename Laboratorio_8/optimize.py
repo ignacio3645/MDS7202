@@ -87,4 +87,5 @@ def optimize_model():
     mlflow.xgboost.log_model(best_model, artifact_path="models")
 
 
-optimize_model()
+if __name__ == "__main__":
+    optimize_model()
