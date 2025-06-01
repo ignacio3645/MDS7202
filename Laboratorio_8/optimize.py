@@ -74,7 +74,7 @@ def objective(trial):
 # Funcion a implementar
 def optimize_model():
     sampler = TPESampler(seed=42)
-    study = optuna.create_study(direction="minimize", sampler=sampler)
+    study = optuna.create_study(direction="maximize", sampler=sampler)
     study.optimize(objective, timeout=300)  # por 5 minutos
 
     # Se obtiene el mejor modelo
