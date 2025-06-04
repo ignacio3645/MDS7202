@@ -61,7 +61,7 @@ def objective(trial):
     run_name = f"XGBoost: learning_rate = {learning_rate}, n_estimators = {n_estimators}, max_depth = {max_depth}, max_leaves = {max_leaves}, min_child_weight = {min_child_weight}, reg_alpha = {reg_alpha}, reg_lambda = {reg_lambda}"
     
     # Se determina el comienzo antes del entrenamiento
-    with mlflow.start_run(run_name=run_name, nested=True, experiment_id=experiment_id):
+    with mlflow.start_run(run_name=run_name, experiment_id=experiment_id):
 
         # Se entrena el modelo
         model.fit(X_train, y_train)
