@@ -45,23 +45,24 @@ def preprocess_and_train():
     df_train = pd.read_csv('dags/' + str(fecha) + '/splits/df_train.csv')
     df_test = pd.read_csv('dags/' + str(fecha) + '/splits/df_test.csv')
 
-    # Se definen columnas numericas y categoricas
-    categ = ...
-    num = ...
+    # # Se definen columnas numericas y categoricas
+    # categ = ['Gender', 'EducationLevel', 'PreviousCompanies', 'RecruitmentStrategy']
+    # y = ['HiringDecision']
+    # num = ...
 
-    # Se determinan las transformaciones a aplicar sobre categ y num
-    num_transform = Pipeline([])
-    categ_transform = Pipeline([])
+    # # Se determinan las transformaciones a aplicar sobre categ y num
+    # num_transform = Pipeline([])
+    # categ_transform = Pipeline([])
 
-    # Se define columntransformer
-    column_transformer = ColumnTransformer([('numerical', num_transform, num),
-                                            ('categorical', categ_transform, categ)],
-                                            verbose_feature_names_out = False)
-    column_transformer.set_output(transform='pandas')
+    # # Se define columntransformer
+    # column_transformer = ColumnTransformer([('numerical', num_transform, num),
+    #                                         ('categorical', categ_transform, categ)],
+    #                                         verbose_feature_names_out = False)
+    # column_transformer.set_output(transform='pandas')
 
     # Aplicamos ColumnTransformer a los datos y se entrenan
     # df_mean_imputer = column_transformer.fit_transform(df_train)
-    pipeline = Pipeline([('column_transformer', column_transformer),
+    pipeline = Pipeline([
                          ('RandomForestClassifier', RandomForestClassifier())])
     
     # Se aplica el pipeline 
