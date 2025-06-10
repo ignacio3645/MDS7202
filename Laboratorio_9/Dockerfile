@@ -7,14 +7,16 @@ WORKDIR /root/airflow
 # Establece la variable de entorno AIRFLOW_HOME
 ENV AIRFLOW_HOME=/root/airflow
 
+# Instala curl 
+RUN apt-get update && apt-get install -y curl
+
 # Instala Apache Airflow
-RUN pip install apache-airflow
+RUN pip install "apache-airflow==2.9.1"
 RUN pip install scikit-learn
 RUN pip install pandas
 RUN pip install numpy
+RUN pip install gradio
 
-# Instala curl 
-RUN apt-get update && apt-get install -y curl
 
 # Inicializa la base de datos de Airflow
 RUN airflow db init

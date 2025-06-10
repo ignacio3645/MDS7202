@@ -3,18 +3,19 @@ from airflow.operators.python import PythonOperator
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.bash import BashOperator
 from hiring_functions import create_folders, split_data, preprocess_and_train, gradio_interface
-import datetime
+from datetime import datetime
 
 # Se inicializa un DAG 
 
 with DAG(
-    dag_id = 'hiring_lineal',
-    start_date = '2024-10-01',
-    catchup = False, 
-    schedule = None) as dag:
+    dag_id = 'hiring_lineal', # dag_id para reconocer dag
+    start_date = datetime(2024,10,1), # fecha de inicio
+    catchup = False, # sin backfill
+    schedule = None # ejecucion manual
+    ) as dag:
 
     # Task 1: marcador de posicion que indique el incio del pipeline
-    task_inicio_pipeline = EmptyOperator(task_id='Inicio del Pipeline') 
+    task_inicio_pipeline = EmptyOperator(task_id='inicio_del_pipeline') 
 
     # Task 2: Se crean las carpetas usando create_folder()
     task_create_folder = PythonOperator(
@@ -23,11 +24,12 @@ with DAG(
         )
     
     # Task 3: descargar data_1.csv
-    fecha = datetime.datetime.now().date()
+    fecha = datetime.now().date()
     task_download_dataset = BashOperator(
         task_id='descargar_data_1.csv',
-        bash_command="curl -o " 
-        "/root/airflow" + str(fecha) + "data_1.csv.csv "
+        bash_command=
+        "curl -o " 
+        "/root/airflow/{{ds}}/raw/data_1.csv "
         "https://gitlab.com/eduardomoyab/laboratorio-13/-/raw/main/files/data_1.csv"
     )
 
