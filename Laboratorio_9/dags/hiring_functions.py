@@ -8,7 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
 import joblib
 import gradio as gr
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
 
 def create_folders():
@@ -52,11 +52,12 @@ def preprocess_and_train():
     num = [col for col in df_train.columns if col not in categ+y]
 
     # Se determinan las transformaciones a aplicar sobre categ y num
+    categ_transform = Pipeline([('onehotencoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))])
     num_transform = Pipeline([('minmaxscaler', MinMaxScaler())])
 
     # Se define columntransformer
     column_transformer = ColumnTransformer([('numerical', num_transform, num),
-                                            ('categorical', 'passthrough', categ)],
+                                            ('categorical', categ_transform, categ)],
                                             verbose_feature_names_out = False)
     column_transformer.set_output(transform='pandas')
 
