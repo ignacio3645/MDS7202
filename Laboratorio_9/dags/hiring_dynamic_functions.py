@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.metrics import accuracy_score
 import joblib
 
@@ -66,7 +66,7 @@ def train_model(model):
     cat_cols = X_train.select_dtypes(exclude='number').columns.tolist()
 
     preprocessor = ColumnTransformer(transformers=[
-        ('num', StandardScaler(), num_cols),
+        ('num', MinMaxScaler(), num_cols),
         ('cat', OneHotEncoder(handle_unknown='ignore'), cat_cols)
     ])
 
