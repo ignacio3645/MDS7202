@@ -8,6 +8,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, f1_score
 import joblib
 import gradio as gr
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
 
 def create_folders():
@@ -42,10 +43,27 @@ def preprocess_and_train():
     fecha = datetime.now().date()
 
     # Se leen los df de train y test
-    df_train = pd.read_csv(str(fecha) + '/splits/df_train.csv')
-    df_test = pd.read_csv(str(fecha) + '/splits/df_test.csv')
+    df_train = pd.read_csv(str(fecha) + '/splits/df_train.csv', index_col=0)
+    df_test = pd.read_csv(str(fecha) + '/splits/df_test.csv', index_col=0)
 
-    pipeline = Pipeline([('RandomForestClassifier', RandomForestClassifier())])
+    # Se definen columnas numericas y categoricas
+    categ = ['Gender', 'EducationLevel', 'PreviousCompanies', 'RecruitmentStrategy']
+    y = ['HiringDecision']
+    num = [col for col in df_train.columns if col not in categ+y]
+
+    # Se determinan las transformaciones a aplicar sobre categ y num
+    categ_transform = Pipeline([('onehotencoder', OneHotEncoder(handle_unknown='ignore', sparse_output=False))])
+    num_transform = Pipeline([('minmaxscaler', MinMaxScaler())])
+
+    # Se define columntransformer
+    column_transformer = ColumnTransformer([('numerical', num_transform, num),
+                                            ('categorical', categ_transform, categ)],
+                                            verbose_feature_names_out = False)
+    column_transformer.set_output(transform='pandas')
+
+    # Se define el pipeline
+    pipeline = Pipeline([('column_transform', column_transformer),
+                         ('RandomForestClassifier', RandomForestClassifier())])
     
     # Se aplica el pipeline 
     pipeline.fit(df_train.drop(columns='HiringDecision'), df_train['HiringDecision'])
